@@ -1,0 +1,82 @@
+/*
+Semester Project Code Submission
+Student: Makayla Coomer Student ID Number: 856501223
+Professor: Nancy Beasley
+Class: Introduction to Digital Computation
+Submision Date: 11/5/2021
+*/
+
+#include <iostream>
+#include <string>
+#include <fstream>
+using namespace std;
+
+struct Contact                                                                                      // Create Structure Contact
+{
+    string firstName, lastName, zip, phone, email;
+};
+
+Contact createContact(string first, string last, string zip, string phone, string email); 
+void printContact(Contact contact[], int size);
+int main()
+{
+    int counter = 0;                                                                               // Initialize and allocate variables. Int Counter is set to zero in order to increment with each line read in the file            
+    Contact *newContact;                                                                                
+    string first, last, zip, phone, email,sentence;   
+
+    ifstream inFile;                                                                               // Attempt to open contact file                                                                  
+    inFile.open("C:\\Users\\SIU856501223\\Desktop\\contacts.txt"); 
+
+    if (!inFile.is_open())                                                                         // If the file doesn't open, the code should return an error message and end
+    {                                                                                                   
+        cout << "Error opening file, please exit program and try again.";
+        return 0;
+    }
+
+    while (inFile.good())                                                                          // If file opens, read through each line of text and increment counter after each line. NO OUTPUTS
+    {
+        getline(inFile, sentence);
+        counter++;
+    }
+
+    newContact = new Contact[counter];                                                              // Set size of array newContact 
+
+    inFile.clear();                                                                                 // Clear file marker and reset to the begining of the text                                                                  
+    inFile.seekg(0);
+
+    while (inFile.good())                                                                           // Until the file marker runs out of lines, read in data and insert it into array newContact
+        {
+        for (int i = 0; i < counter; i++)
+        {
+            inFile >> first >> last >> zip >> phone >> email;                                          
+            newContact[i] = createContact(first, last, zip, phone, email);                            
+          
+        }
+        }
+
+    inFile.close();                                                                                 // Clean up lose ends: close file, output number of contacts, output contacts, dealocate newContact                                                                               
+    cout << counter << " files read in succsesfully"<<endl;                                            
+    printContact(newContact, counter);                                                                 
+    delete[] newContact;                                                                               
+    }
+
+Contact createContact(string first, string last, string zip, string phone, string email)                // Create Contact
+{
+    Contact newContact;
+    newContact.firstName = first;
+    newContact.lastName = last;
+    newContact.zip = zip;
+    newContact.phone = phone;
+    newContact.email = email;
+    return newContact;
+}
+
+void printContact(Contact newContact[], int size)                                                       // Print contact
+{
+    int i;
+    for (i = 0; i < size; i++)
+    {
+        cout << newContact[i].firstName<<"  "<<newContact[i].lastName<<"    " << newContact[i].zip<<"   " << newContact[i].phone<<"    " << newContact[i].email;
+        cout << endl;
+    }
+}
